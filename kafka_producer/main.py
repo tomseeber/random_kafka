@@ -1,12 +1,9 @@
 import requests
 from confluent_kafka import Producer
-import os
-import json 
-
 
 KAFKA_TOPIC = 'latest_events'
 KAFKA_BOOTSTRAP_SERVERS = 'broker:9092'
-base_url = "http://fact_api"
+REQUEST_URL = "https://stream.wikimedia.org/v2/stream/recentchange"
 
 def delivery_callback(err, msg):
     if err:
@@ -22,18 +19,17 @@ def main():
     producer = Producer(conf)
 
     # Read the Wikimedia stream and produce messages to Kafka
-    response = requests.get(f"{base_url}/fact").json()
-    for adict in response:
-        if adict:
-            message = json.dumps(adict)
+    response = requests.get(REQUEST_URL, stream=True)
+    for line in response.iter_lines():
+        if line:
             # Produce message to Kafka
-            producer.produce(KAFKA_TOPIC, message, callback=delivery_callback)
+            producer.produce(KAFKA_TOPIC, line, callback=delivery_callback)
 
             # Flush messages to Kafka to ensure they are sent immediately
             producer.flush()
 
     # Close Kafka producer
-    #producer.close()
+    producer.close()
 
 if __name__ == '__main__':
     main()

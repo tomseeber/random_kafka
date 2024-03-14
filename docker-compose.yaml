@@ -1,12 +1,5 @@
 version: '3'
 services:
-  fact_api:
-    image: fact-api
-    ports:
-      - 8000:80
-    build: fastapi/.
-    environment:
-      - BASE_URL=http://fact_api
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
@@ -33,7 +26,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      BASE_URL: http://fact_api
     volumes:
       - ./broker/:/home
   kafkaproducer:
@@ -45,13 +37,11 @@ services:
       - broker
     depends_on:
       - broker
-      - fact_api
     user: root
     environment:
       KAFKA_BROKER: broker:9092 
     volumes:
       - ./kafka_producer/:/home
-
   kafkaconsumer:
     image: kafkaconsumer
     build: kafka_consumer/.
