@@ -5,7 +5,6 @@ import json
 
 KAFKA_TOPIC = 'latest_events'
 KAFKA_BOOTSTRAP_SERVERS = 'broker:9092'
-REQUEST_URL = "https://stream.wikimedia.org/v2/stream/recentchange"
 REQUEST_URL2 = "http://fact_api/fact"
 def delivery_callback(err, msg):
     if err:
@@ -33,30 +32,7 @@ def main():
             time.sleep(2)
         except Exception as e:
             print(e)
-            print("test line 30\n")
-
-
-        # Flush messages to Kafka to ensure they are sent immediately
-    
-    
-    # for line in response.iter_lines():
-    #     if line:
-    #         print("Test TEst line 25", line)
-    #         print(KAFKA_TOPIC, " testing line")
-    #         try:
-    #             json_api = requests.get('http://fact_api/fact').json()
-    #             print(json_api)
-    #         except Exception as e:
-    #             print(e)
-    #             print("test line 32\n")
-                
-    #         # Produce message to Kafka
-    #         producer.produce(KAFKA_TOPIC, line, callback=delivery_callback)
-
-    #         # Flush messages to Kafka to ensure they are sent immediately
-    #         producer.flush()
-
-    # Close Kafka producer
+            print("test line 30\n")    
     producer.close()
 
 if __name__ == '__main__':
