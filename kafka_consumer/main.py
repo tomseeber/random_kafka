@@ -102,6 +102,14 @@ if __name__ == '__main__':
                                  (msg.topic(), msg.partition(), msg.offset(),
                                   str(msg.key())))
                 print(msg.value())
+                
+                print("----------------------------------------------------------------")
+                print(json.loads(msg.value().decode('ascii')))
+                
+                ### To Use this data,  and format this data.abs
+                #json.loads(m.decode('ascii')))
+
+                
                 # Store the offset associated with msg to a local cache.
                 # Stored offsets are committed to Kafka by a background thread every 'auto.commit.interval.ms'.
                 # Explicitly storing offsets after processing gives at-least once semantics.

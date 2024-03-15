@@ -28,6 +28,11 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     volumes:
       - ./broker/:/home
+  fact_api:
+    image: fact-api
+    ports:
+      - 8000:80
+    build: fastapi/.
   kafkaproducer:
     image: kafkaproducer
     build: kafka_producer/.
